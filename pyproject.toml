@@ -1,0 +1,27 @@
+[project]
+name = "plotpages"
+version = "0.1.0"
+description = "Minimal helpers for Dash multipage plot pages"
+requires-python = "==3.11.*"
+dependencies = ["dash==2.13.0", "plotly==5.9.0"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pandas==1.5.3"]
+
+[build-system]
+requires = ["setuptools>=67"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["plotpages"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# The clientside JS templates use %s; .format would mean doubling every JS brace.
+ignore = ["UP031"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:dash"

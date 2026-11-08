@@ -1,0 +1,120 @@
+/* Meridian example: shadcn-style neutrals. Hooks from plotpages: <html data-theme>, .pp-*.
+   --card must equal SURFACE in chart_theme.py so plots sit flush on their card. */
+:root {
+  --background: #fff; --foreground: #09090b; --card: #fff;
+  --muted: #f4f4f5; --muted-foreground: #71717a; --border: #e4e4e7;
+  --primary: #18181b; --primary-foreground: #fafafa; --ring: #a1a1aa;
+  --destructive: #dc2626; --radius: .5rem;
+  color-scheme: light;
+}
+:root[data-theme=dark] {
+  --background: #09090b; --foreground: #fafafa; --card: #09090b;
+  --muted: #27272a; --muted-foreground: #a1a1aa; --border: #27272a;
+  --primary: #fafafa; --primary-foreground: #18181b; --ring: #52525b;
+  --destructive: #f87171;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--background); color: var(--foreground); font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; }
+
+/* shell */
+.app { display: flex; min-height: 100vh; }
+.sidebar { flex: none; width: 15rem; padding: 1.25rem 1rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 1.5rem; }
+.brand { display: flex; align-items: center; gap: .6rem; padding: 0 .75rem; font-weight: 600; letter-spacing: -.01em; }
+.brand::before { content: ""; width: 1.25rem; height: 1.25rem; border-radius: .35rem; background: var(--primary); }
+.nav { display: flex; flex-direction: column; gap: .125rem; }
+.nav-link { padding: .45rem .75rem; border-radius: calc(var(--radius) - 2px); color: var(--muted-foreground); font-weight: 500; text-decoration: none; }
+.nav-link:hover, .nav-link[data-active] { background: var(--muted); color: var(--foreground); }
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.topbar { height: 3.5rem; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.crumb { color: var(--muted-foreground); font-weight: 500; }
+.content { width: 100%; max-width: 72rem; padding: 1.5rem; }
+@media (max-width: 760px) {
+  .app { flex-direction: column; }
+  .sidebar { width: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+  .nav { flex-direction: row; flex-wrap: wrap; }
+}
+
+/* page header (ui.page_header) */
+.page-header h1 { margin: 0; font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; }
+.page-header p { margin: .25rem 0 1.25rem; color: var(--muted-foreground); }
+
+/* buttons: theme toggle + download toolbar */
+.pp-theme button, .pp-toolbar button {
+  height: 2rem; min-width: 2rem; padding: 0 .75rem; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--background); color: var(--foreground); font: inherit; font-weight: 500; cursor: pointer;
+}
+.pp-theme button { padding: 0; }
+.pp-theme button:hover, .pp-toolbar button:hover { background: var(--muted); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* controls */
+.pp-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem 1.25rem; margin-bottom: 1rem; }
+.pp-param { min-width: 12rem; }
+.pp-param > label { display: block; margin-bottom: .35rem; font-size: .8rem; font-weight: 500; color: var(--muted-foreground); }
+.pp-param > input[type=text], .pp-param > input[type=number] {  /* direct child only: not a dropdown's inner search input */
+  width: 100%; height: 36px; padding: 0 .75rem; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--background); color: var(--foreground); font: inherit;
+}
+.option { margin: -.5rem 0 1rem; color: var(--muted-foreground); }
+.option input { accent-color: var(--primary); margin-right: .4rem; }
+
+/* dcc.Dropdown (react-select v1 class names). dcc injects its stylesheet after this one, with rules like
+   `.is-open > .Select-control { background: #fff }`, so anything it also sets needs !important here. */
+.Select-control, .is-open > .Select-control {
+  height: 36px; border-radius: calc(var(--radius) - 2px) !important; border-color: var(--border) !important;
+  background: var(--background) !important; color: var(--foreground) !important;
+}
+.is-open > .Select-control { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+.Select.is-focused > .Select-control { border-color: var(--ring) !important; box-shadow: none !important; }
+.Select-value-label, .Select-placeholder, .Select--single > .Select-control .Select-value { color: var(--foreground) !important; line-height: 34px; }
+.Select-placeholder { color: var(--muted-foreground) !important; }
+.Select-input > input { color: var(--foreground) !important; outline: none !important; box-shadow: none !important; }  /* focus is shown on the control */
+.Select-menu-outer {
+  border-color: var(--border) !important; border-radius: calc(var(--radius) - 2px); background: var(--background) !important;
+  box-shadow: 0 4px 12px rgb(0 0 0 / .12); z-index: 10;
+}
+.Select-option, .VirtualizedSelectOption { background: var(--background) !important; color: var(--foreground) !important; }
+.Select-option.is-focused, .VirtualizedSelectFocusedOption { background: var(--muted) !important; }
+.Select-option.is-selected, .VirtualizedSelectSelectedOption { font-weight: 600; }
+.Select--multi .Select-value { border-color: var(--border) !important; background: var(--muted) !important; color: var(--foreground) !important; }
+.Select--multi a.Select-value-label { color: var(--foreground) !important; }
+.Select--multi .Select-value-icon { border-color: var(--border) !important; }
+.Select--multi .Select-value-icon:hover { background: var(--border) !important; color: var(--foreground) !important; }
+.Select-arrow { border-top-color: var(--muted-foreground) !important; }
+.is-open > .Select-control .Select-arrow { border-color: transparent transparent var(--muted-foreground) !important; }
+
+/* dcc.RadioItems.segmented */
+.segmented { display: inline-flex; padding: 3px; border-radius: var(--radius); background: var(--muted); }
+.segmented label { margin: 0; padding: 0 .75rem; line-height: 28px; border-radius: calc(var(--radius) - 3px); color: var(--muted-foreground); font-weight: 500; cursor: pointer; }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+@supports selector(:has(*)) {
+  .segmented label:has(input:checked) { background: var(--background); color: var(--foreground); box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
+}
+
+/* dcc.Slider (same load-order issue as the dropdown, so !important) */
+.rc-slider-rail { background: var(--muted) !important; }
+.rc-slider-track { background: var(--primary) !important; }
+.rc-slider-handle { border-color: var(--primary) !important; background: var(--background) !important; opacity: 1; }
+.rc-slider-handle:active, .rc-slider-handle:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 4px var(--muted) !important; }
+.rc-slider-dot { border-color: var(--border) !important; background: var(--background) !important; }
+.rc-slider-dot-active { border-color: var(--primary) !important; }
+.rc-slider-mark-text { color: var(--muted-foreground) !important; }
+
+/* toolbar + graph card */
+.pp-toolbar { display: flex; justify-content: flex-end; gap: .5rem; margin-bottom: .5rem; }
+.pp-page .dash-graph { padding: .75rem; border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px); background: var(--card); }
+
+/* custom UI returned from plot(): KPI cards (pages/summary.py) */
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1rem; }
+.kpi { padding: 1rem 1.25rem; border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px); background: var(--card); }
+.kpi-label { font-size: .8rem; font-weight: 500; color: var(--muted-foreground); }
+.kpi-value { margin-top: .25rem; font-size: 1.75rem; font-weight: 600; letter-spacing: -.02em; }
+.kpi-delta { margin-top: .25rem; min-height: 1.25rem; font-size: .8rem; color: var(--muted-foreground); }
+
+/* alerts (errors) */
+.pp-alert { margin-bottom: .75rem; padding: .75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--muted); }
+.pp-alert-error { border-color: var(--destructive); background: transparent; color: var(--destructive); }
+.pp-alert summary { cursor: pointer; margin-top: .25rem; font-size: .8rem; }
+.pp-alert pre { margin: .5rem 0 0; white-space: pre-wrap; font-size: .75rem; }

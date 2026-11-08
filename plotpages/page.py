@@ -63,7 +63,7 @@ def register_page_plot(
     params: Sequence[Param] = (),
     presets: bool | Sequence[str] = True,
     name: str | None = None,
-    title: str | None = None,
+    title: str | Callable[..., str] | None = None,
     order: int | None = None,
     errors: bool = True,
     loading: bool = True,
@@ -101,6 +101,7 @@ def register_page_plot(
                 Empty tuple for no toolbar.
       cache     keep the last N `process` results keyed by params (0 = off). Results
                 are shared between users and must not be mutated by `plot`.
+    `title` may be a string or a callable returning one (Dash calls it with the URL's query params).
     Extra keyword arguments go to `dash.register_page`.
     """
     key = re.sub(r"\W+", "-", path.strip("/")).strip("-") or "home"
